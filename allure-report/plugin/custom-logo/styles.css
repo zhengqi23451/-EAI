@@ -1,0 +1,11 @@
+.side-nav__brand {
+  background: url('logo.PNG') no-repeat left center !important;
+  margin-left: 10px;
+}
+.side-nav__brand-text {
+  display: none;
+}
+.side-nav__brand::after{
+  content: "\91d1\9e3f";
+  margin-left: 10px;
+}
