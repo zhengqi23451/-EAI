@@ -290,3 +290,101 @@ def test_set(driver,navigate_to_public_form):
         assert text.text == "设置成功"
     except Exception as e:
         raise e
+
+
+@pytest.mark.parametrize("driver",['chrome'],indirect=True)
+@allure.epic("系统管理设置")
+@allure.feature("菜单权限管理")
+@allure.story("公共表单")
+@allure.description("样式比较")
+def test_file_style(driver, navigate_to_public_form):
+    """测试文件相关组件的样式"""
+    wait = WebDriverWait(driver, 20)
+
+    # 定义预期样式
+    expected_styles = {
+        # 查询按钮样式
+        'search_button': {
+            'background-color': 'rgb(0, 150, 136)',
+            'color': 'rgb(255, 255, 255)',
+            'border-radius': '2px',
+            'width': '76px',
+            'height': '28px'
+        },
+        # 重置按钮样式
+        'reset_button': {
+            'background-color': 'rgb(60, 141, 188)',
+            'color': 'rgb(255, 255, 255)',
+            'border-radius': '2px',
+            'width': '76px',
+            'height': '28px'
+        },
+        # 新增1按钮样式
+        'set_button': {
+            'background-color': 'rgb(0, 150, 136)',
+            'color': 'rgb(255, 255, 255)',
+            'border-radius': '2px',
+            'width': '88px',
+            'height': '28px'
+        }
+    }
+    time.sleep(1)
+
+    try:
+        # 测试查询按钮样式
+        search_button = wait.until(EC.presence_of_element_located(
+            (By.XPATH, '//form//div[contains(@class,"search-btns")]/button[contains(@class,"el-button--success")]')))
+        actual_styles = {
+            'background-color': to_rgb(search_button.value_of_css_property('background-color')),
+            'color': to_rgb(search_button.value_of_css_property('color')),
+            'border-radius': search_button.value_of_css_property('border-radius'),
+            'width': search_button.value_of_css_property('width'),
+            'height': search_button.value_of_css_property('height')
+        }
+        if actual_styles != expected_styles['search_button']:
+            highlight_element(driver, search_button)
+            allure.attach(driver.get_screenshot_as_png(), name="查询按钮样式匹配失败截图",
+                          attachment_type=allure.attachment_type.PNG)
+            reset_element(driver, search_button)
+        assert actual_styles == expected_styles['search_button'], f"查询按钮样式不匹配: {actual_styles}"
+
+        time.sleep(1)
+
+        # 测试重置按钮样式
+        reset_button = wait.until(EC.presence_of_element_located(
+            (By.XPATH, '//form//div[contains(@class,"search-btns")]/button[contains(@class,"el-button--primary")]')))
+        actual_styles = {
+            'background-color': to_rgb(reset_button.value_of_css_property('background-color')),
+            'color': to_rgb(reset_button.value_of_css_property('color')),
+            'border-radius': reset_button.value_of_css_property('border-radius'),
+            'width': reset_button.value_of_css_property('width'),
+            'height': reset_button.value_of_css_property('height')
+        }
+        if actual_styles != expected_styles['reset_button']:
+            highlight_element(driver, reset_button)
+            allure.attach(driver.get_screenshot_as_png(), name="重置按钮样式匹配失败截图",
+                          attachment_type=allure.attachment_type.PNG)
+            reset_element(driver, reset_button)
+        assert actual_styles == expected_styles['reset_button'], f"重置按钮样式不匹配: {actual_styles}"
+
+
+        # 测试公共表单设置按钮样式
+        set_button = wait.until(EC.presence_of_element_located(
+            (By.XPATH, '//div[@class="main-container"]//div[@class="table-info-bar flex flex-x-sb flex-y-center"]/div[@class="right flex flex-y-center"]/button[span[text()="公共表单设置"]]')))
+        actual_styles = {
+            'background-color': to_rgb(set_button.value_of_css_property('background-color')),
+            'color': to_rgb(set_button.value_of_css_property('color')),
+            'border-radius': set_button.value_of_css_property('border-radius'),
+            'width': set_button.value_of_css_property('width'),
+            'height': set_button.value_of_css_property('height')
+        }
+        if actual_styles != expected_styles['set_button']:
+            highlight_element(driver,set_button)
+            allure.attach(driver.get_screenshot_as_png(), name="公共表单设置按钮样式匹配失败截图",attachment_type=allure.attachment_type.PNG)
+            reset_element(driver,set_button)
+        assert actual_styles == expected_styles['set_button'], f"公共表单设置按钮样式不匹配: {actual_styles}"
+
+
+    except Exception as e:
+        # 截图并附加到 Allure 报告
+        raise e
