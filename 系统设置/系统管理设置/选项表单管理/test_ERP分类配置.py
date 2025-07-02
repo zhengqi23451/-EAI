@@ -226,7 +226,6 @@ def test_modify(driver,navigate):
     except Exception as e:
         raise e
 
-
 @pytest.mark.parametrize("driver",['chrome'],indirect=True)
 @allure.epic("系统管理设置")
 @allure.feature("选项表单管理")

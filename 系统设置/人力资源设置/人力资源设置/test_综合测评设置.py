@@ -175,10 +175,13 @@ def test_add(driver,navigate_to_comprehensive_evaluation):
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='el-dialog__body']//form//div[label[@for='project_name']]/div[@class='el-form-item__content']//input"))).send_keys("test")
         #输入选项等级一名称
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='el-dialog__body']/form/div[label[@for='level_one']]/div[@class='el-form-item__content']//input"))).send_keys("1")
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='el-dialog__body']/form/div[label[@for='one_fraction']]/div[@class='el-form-item__content']//input"))).send_keys("1")
         #输入选项等级二名称
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='el-dialog__body']/form/div[label[@for='level_two']]/div[@class='el-form-item__content']//input"))).send_keys("2")
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='el-dialog__body']/form/div[label[@for='two_fraction']]/div[@class='el-form-item__content']//input"))).send_keys("2")
         #输入选项等级三名称
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='el-dialog__body']/form/div[label[@for='level_three']]/div[@class='el-form-item__content']//input"))).send_keys("3")
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='el-dialog__body']/form/div[label[@for='three_fraction']]/div[@class='el-form-item__content']//input"))).send_keys("3")
         #点击保存
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='el-dialog__footer']/div/button/span[text()='保存']"))).click()
         #提示
@@ -311,7 +314,7 @@ def test_file_style(driver, navigate_to_comprehensive_evaluation):
 
         #编辑按钮样式
         modify_button = wait.until(EC.element_to_be_clickable(
-            (By.XPATH, '//tbody/tr[6]/td[contains(@class,"col--last")]/div/div/button[contains(@class,"font-primary")]')))
+            (By.XPATH, '//tbody/tr[1]/td[contains(@class,"col--last")]/div/div/button[contains(@class,"font-primary")]')))
         actual_styles = {
             'background-color': to_rgb(modify_button.value_of_css_property('background-color')),
             'color': to_rgb(modify_button.value_of_css_property('color')),
@@ -327,7 +330,7 @@ def test_file_style(driver, navigate_to_comprehensive_evaluation):
 
         #删除按钮样式
         delete_button = wait.until(EC.element_to_be_clickable(
-            (By.XPATH, '//tbody/tr[6]/td[contains(@class,"col--last")]/div/div/button[contains(@class,"font-danger")]')))
+            (By.XPATH, '//tbody/tr[1]/td[contains(@class,"col--last")]/div/div/button[contains(@class,"font-danger")]')))
         actual_styles = {
             'background-color': to_rgb(delete_button.value_of_css_property('background-color')),
             'color': to_rgb(delete_button.value_of_css_property('color')),
