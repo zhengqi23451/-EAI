@@ -135,7 +135,6 @@ def navigate_to_approval(driver, login):
     try:
         # 点击协同办公设置
         wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="menu-bar"]/ul/li[text()=" 协同办公 "]'))).click()
-
         if width==1366:
             #点击扩展列表
             wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@class="menu-bar"]/div[@class="flex flex-x-center flex-y-center fold-box"]/i'))).click()

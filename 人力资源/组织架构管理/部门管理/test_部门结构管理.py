@@ -44,7 +44,6 @@ def to_rgb(color):
         return f"rgb({r}, {g}, {b})"
     else:
         return color  # 无法识别的格式原样返回
-
 @pytest.fixture(scope="module", params=[(1920,1080),(1366,768)])
 def resolution(request):
     """分辨率fixture"""
@@ -88,7 +87,6 @@ def login(driver):
     # 访问登录页
     driver.get("http://192.168.2.42:9529/#/login")
     wait = WebDriverWait(driver, 20)
-
     try:
         # 验证码处理
         captcha_img = wait.until(EC.presence_of_element_located(

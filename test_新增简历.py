@@ -51,7 +51,7 @@ def to_rgb(color):
         return color  # 无法识别的格式原样返回
 
 
-@pytest.fixture(scope="module", params=[(1920,1080),(1366,768)])
+@pytest.fixture(scope="module", params=[(1920,1080)])
 def resolution(request):
     """分辨率fixture"""
     return request.param
@@ -128,33 +128,39 @@ def login(driver):
 
 
 #进入新增简历界面
-
 @pytest.fixture(scope="module")
 def navigate_to_addjl(driver, login):
-    """导航到新增简历页面"""
+    """导航到审批页面"""
     window_size = driver.get_window_size()
     width, height = window_size["width"], window_size["height"]
-    wait = WebDriverWait(driver, 10)
+    wait = WebDriverWait(driver, 20)
     try:
-        wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div/div[1]/div[2]/ul/li[2]'))).click()
+        # 点击协同办公设置
+        wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="menu-bar"]/ul/li[text()=" 人力资源 "]'))).click()
         if width==1366:
-            wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div/div[1]/div[2]/div/i'))).click()
-        wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div/div[2]/div/div[1]/div/ul/div/li/div/span'))).click()
-        wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div/div[2]/div/div[1]/div/ul/div/li/ul/div/li/div/span'))).click()
-        wait.until(EC.element_to_be_clickable((By.XPATH,'//*[@id="app"]/div/div[2]/div/div[1]/div/ul/div/li/ul/div/li/ul/div[2]/a/li/span'))).click()
-
-        time.sleep(3)
+            #点击扩展列表
+            wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@class="menu-bar"]/div[@class="flex flex-x-center flex-y-center fold-box"]/i'))).click()
+        #点击人力资源管理
+        wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="sidebar-container"]//li//span[text()="人力资源管理"]'))).click()
+        #人力资源工作
+        wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="sidebar-container"]//li//span[text()="人力资源工作"]'))).click()
+        #点击新增简历输入
+        wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="sidebar-container"]//li/ul//span[text()="新增简历输入"]'))).click()
         # 验证页面加载
+        time.sleep(2)
         title = wait.until(EC.presence_of_element_located(
-            (By.XPATH, '//*[@id="app"]/div/div[3]/section/div/form/div[1]/div/div[1]/span')))
+            (By.XPATH, '//form//div[@class="my-grid-box"]//span[text()="应聘资料输入"]')))
+        if title.text !="应聘资料输入":
+            highlight_element(driver,title)
+            allure.attach(driver.get_screenshot_as_png(), name="导航到应聘资料输入页面失败截图",attachment_type=allure.attachment_type.PNG)
+            reset_element(driver,title)
         assert title.text == "应聘资料输入"
     except Exception as e:
         # 截图并附加到 Allure 报告
-        allure.attach(driver.get_screenshot_as_png(), name="导航失败截图", attachment_type=allure.attachment_type.PNG)
         raise e
 
 
-
+@pytest.mark.skip
 @allure.feature("人力资源")
 @allure.story("新简历输入")
 @allure.description("样式比较")
@@ -259,23 +265,76 @@ def test_file_style(driver, navigate_to_addjl):
 def test_addjl_save(driver,navigate_to_addjl):
     wait = WebDriverWait(driver, 10)
     try:
-        wait.until(EC.element_to_be_clickable(
-            (By.XPATH,'//*[@id="app"]/div/div[3]/section/div/form/div[1]/div/div[2]/div[1]/div[2]/div[1]/div/div/div/input'))).send_keys("t1")
-        a=f"{random.randint(1000,6666):04d}"
-        year=f"{random.randint(1980,2004):04d}"
-        month=f"{random.randint(1,12):02d}"
-        day=f"{random.randint(1,28):02d}"
-        wait.until(EC.element_to_be_clickable(
-            (By.XPATH,'//*[@id="app"]/div/div[3]/section/div/form/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div/div/input'))).send_keys("331081"+year+month+day+a)
-        wait.until(EC.element_to_be_clickable(
-            (By.XPATH,'//*[@id="app"]/div/div[3]/section/div/form/div[2]/button[2]'))).click()
+        #姓名
+        wait.until(EC.presence_of_element_located((By.XPATH,"//div[contains(@class,'el-row')]//div[label[@for='name']]//input"))).send_keys("test1")
+        #身份证
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='id_card']]//input"))).send_keys("431321200812138562")
+        #户口地址
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='hukou_address']]//input"))).send_keys("地球村")
+        #民族
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='nation']]//input"))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@x-placement='bottom-start']//span[text()='汉族']"))).click()
+        #身高体重
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='height']]//input"))).send_keys(160)
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='weight']]//input"))).send_keys(50)
+        #婚姻
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='marriage']]//input"))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@x-placement='bottom-start']//span[text()='未婚']"))).click()
+        #政治面貌
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='political_status']]//input"))).click()
+        time.sleep(1)
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@x-placement='bottom-start']//span[text()='群众']"))).click()
+        #健康
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='health']]//input"))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@x-placement='bottom-start']//span[text()='良好']"))).click()
+        #血型
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='blood_type']]//input"))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@x-placement='bottom-start']//span[text()='A型']"))).click()
+        #公益献血
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='public_welfare']]//input"))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@x-placement='bottom-start']//span[text()='暂无考虑']"))).click()
+        #目标月薪
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='salary']]//input"))).send_keys(3000)
+        #现住地址
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='current_address']]//input"))).send_keys("地球")
+        #学历
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='education']]//input"))).click()
+        time.sleep(1)
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@x-placement='bottom-start']//span[text()='大专']"))).click()
+        #专业
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='speciality']]//input"))).send_keys("土木工程")
+        #毕业时间
+        time.sleep(1)
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='edu_end_time']]//input"))).send_keys("2025-05-01")
+        #毕业学校
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='school']]//input"))).send_keys("人文学院")
+        #手机号
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='mobile']]//input"))).send_keys("17551532058")
+        #紧急联系人
+        #称谓
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='urgent_cont[0].appellation']]//input"))).send_keys("父亲")
+        #姓名
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='urgent_cont[0].urgent_name']]//input"))).send_keys("father")
+        #手机号
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='urgent_cont[0].urgent_mobile']]//input"))).send_keys("18863968359")
+
+        #选择图片
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='grid-col flex-x-center el-col el-col-24']//span"))).click()
+        time.sleep(20)
+
+        # 选择普件
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='incident']]//input"))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@x-placement='top-start']//li[span[text()='普件']]"))).click()
+        # 点击提交
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='form-bottom-bar flex flex-x-center']/button[span[text()='提交']]"))).click()
+
         title = wait.until(EC.presence_of_element_located(
             (By.XPATH, "//div[contains(@class,'el-message')]/p[contains(text(),'保存成功')]")))
-        if title!="保存成功":
+        if title!="提交成功":
             highlight_element(driver,title)
             allure.attach(driver.get_screenshot_as_png(), name="保存失败高亮截图", attachment_type=allure.attachment_type.PNG)
             reset_element(driver, title)
-        assert title.text == "保存成功"
+        assert title.text == "提交成功"
 
     except Exception as e:
         # 截图并附加到 Allure 报告

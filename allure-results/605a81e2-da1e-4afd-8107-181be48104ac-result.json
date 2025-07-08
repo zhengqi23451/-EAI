@@ -1,0 +1,1 @@
+{"name": "test_addjl_save[resolution1-chrome]", "status": "skipped", "description": "保存简历", "parameters": [{"name": "resolution", "value": "(1366, 768)"}, {"name": "driver", "value": "'chrome'"}], "start": 1751959857908, "stop": 1751959857908, "uuid": "8e326817-cf13-4fea-b9d8-ec9ff278cc13", "testCaseId": "b6782687b453c28cc98817fb0727a7d6", "fullName": "test_新增简历#test_addjl_save"}
