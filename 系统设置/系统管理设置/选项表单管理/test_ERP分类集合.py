@@ -1,3 +1,4 @@
+import ast
 import datetime
 import time
 import typing
@@ -25,9 +26,10 @@ from selenium.webdriver.common.keys import Keys
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 df=pd.read_csv(r"C:\Users\Administrator\Desktop\test\address.csv")
-url = df.loc[0, 'url']
-data=df.loc[0,'data']
-
+row=df.loc[0, ['url', 'data']]
+url = row['url']
+data_str = row['data']
+data = ast.literal_eval(data_str)
 def highlight_element(driver, element):
     """高亮显示元素"""
     driver.execute_script("arguments[0].style.border='6px solid red';", element)

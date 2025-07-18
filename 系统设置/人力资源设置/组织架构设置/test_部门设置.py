@@ -1,3 +1,4 @@
+import ast
 import datetime
 import time
 
@@ -19,8 +20,10 @@ import cv2
 import numpy as np
 from selenium.webdriver.common.keys import Keys
 df=pd.read_csv(r"C:\Users\Administrator\Desktop\test\address.csv")
-url = df.loc[0, 'url']
-data=df.loc[0,'data']
+row=df.loc[0, ['url', 'data']]
+url = row['url']
+data_str = row['data']
+data = ast.literal_eval(data_str)
 # 设置Tesseract路径（根据实际安装位置调整）
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 

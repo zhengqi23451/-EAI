@@ -1,3 +1,4 @@
+import ast
 import datetime
 import time
 from selenium.webdriver import ActionChains
@@ -21,8 +22,11 @@ import pandas as pd
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 df=pd.read_csv(r"C:\Users\Administrator\Desktop\test\address.csv")
-url = df.loc[0, 'url']
-data=df.loc[0,'data']
+row=df.loc[0, ['url', 'data']]
+url = row['url']
+data_str = row['data']
+data = ast.literal_eval(data_str)
+
 def highlight_element(driver, element):
     """高亮显示元素"""
     driver.execute_script("arguments[0].style.border='6px solid red';", element)
@@ -57,9 +61,11 @@ def resolution(request):
     """分辨率fixture"""
     return request.param
 
+
 @pytest.fixture(scope="module",params=["chrome","msedge" ,"360se", "360chrome"])
 def driver(request,resolution):
     """初始化 WebDriver"""
+
     browser = request.param
     if browser == "chrome":
         options = Options()
