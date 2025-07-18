@@ -1,5 +1,7 @@
 import datetime
 import time
+
+import pandas as pd
 from selenium.webdriver.chrome.options import Options
 import allure
 import pytest
@@ -20,6 +22,9 @@ from selenium.webdriver.common.keys import Keys
 # 设置Tesseract路径（根据实际安装位置调整）
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
+df=pd.read_csv(r"C:\Users\Administrator\Desktop\test\address.csv")
+url = df.loc[0, 'url']
+data=df.loc[0,'data']
 def highlight_element(driver, element):
     """高亮显示元素"""
     driver.execute_script("arguments[0].style.border='6px solid red';", element)
@@ -47,8 +52,8 @@ def to_rgb(color):
         return f"rgb({r}, {g}, {b})"
     else:
         return color  # 无法识别的格式原样返回
-data=[(2560,1600),(1920,1200),(2560,1440),(1920,1080),(1366,768)]
-@pytest.fixture(scope="module", params=[(1920,1080),(1366,768)])
+
+@pytest.fixture(scope="module", params=data)
 def resolution(request):
 
     """分辨率fixture"""
@@ -90,7 +95,7 @@ def driver(request,resolution):
 def login(driver):
     """登录系统"""
     # 访问登录页
-    driver.get("http://192.168.2.42:9529/#/login")
+    driver.get(url)
     wait = WebDriverWait(driver, 20)
 
     try:
@@ -210,9 +215,15 @@ def test_add(driver,navigate_to_classification):
             (By.XPATH, '//*[@id="app"]/div/div[@class="main-container"]/section/div/div/div[@class="table-info-bar flex flex-x-sb flex-y-center"]/div[@class="right flex flex-y-center"]/button')))
         add.click()
         time.sleep(1)
+        #选择夏令
+        wait.until(EC.element_to_be_clickable(
+            (By.XPATH,"//form/div[label[@for='season']]//input"))).click()
+        wait.until(EC.element_to_be_clickable(
+            (By.XPATH,'//div[@x-placement="bottom-start"]//span[text()="夏令"]'))).click()
         #点击类别
         wait.until(EC.element_to_be_clickable(
             (By.XPATH, "//form[@class='el-form']/div[2]/div[1]/div/div/div/div/input"))).click()
+
         #选择A
         wait.until(EC.element_to_be_clickable(
             (By.XPATH,"//body/div[contains(@class, 'el-select-dropdown') and contains(@class, 'el-popper')]//ul[contains(@class, 'el-select-dropdown__list')]/li/span[text()='A']"))).click()
@@ -328,7 +339,7 @@ def test_delete(driver,navigate_to_classification):
     try:
         #点击删除
         element=wait.until(EC.element_to_be_clickable(
-            (By.XPATH, '//*[@id="app"]/div/div[3]/section/div/div[1]/div[2]/div/div[3]/div[1]/div[1]/div[1]/div[2]/div/table/tbody/tr[18]/td[21]/div/div/button[2]/span')))
+            (By.XPATH, '//tbody/tr[18]/td[21]/div/div/button[2]/span')))
         driver.execute_script("arguments[0].scrollIntoView();", element)
         element.click()
         #点击确认

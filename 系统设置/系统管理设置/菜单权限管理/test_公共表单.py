@@ -1,6 +1,8 @@
 import datetime
 import time
 import typing
+
+import pandas as pd
 from selenium.webdriver import ActionChains
 from selenium.webdriver.chrome.options import Options
 import allure
@@ -21,8 +23,9 @@ from selenium.webdriver.common.keys import Keys
 # 设置Tesseract路径（根据实际安装位置调整）
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-
-
+df=pd.read_csv(r"C:\Users\Administrator\Desktop\test\address.csv")
+url = df.loc[0, 'url']
+data=df.loc[0,'data']
 def highlight_element(driver, element):
     """高亮显示元素"""
     driver.execute_script("arguments[0].style.border='6px solid red';", element)
@@ -50,8 +53,8 @@ def to_rgb(color):
         return f"rgb({r}, {g}, {b})"
     else:
         return color  # 无法识别的格式原样返回
-data=[(2560,1600),(1920,1200),(2560,1440),(1920,1080),(1366,768)]
-@pytest.fixture(scope="module", params=[(1920,1080),(1366,768)])
+
+@pytest.fixture(scope="module", params=data)
 def resolution(request):
 
     """分辨率fixture"""
@@ -92,7 +95,7 @@ def driver(request,resolution):
 def login(driver):
     """登录系统"""
     # 访问登录页
-    driver.get("http://192.168.2.42:9529/#/login")
+    driver.get(url)
     wait = WebDriverWait(driver, 20)
 
     try:
@@ -171,15 +174,15 @@ def test_search_first(driver,navigate_to_public_form):
     wait = WebDriverWait(driver, 20)
     time.sleep(3)
     try:
-        #点击重置按钮
-        wait.until(EC.element_to_be_clickable(
-            (By.XPATH, '//div[contains(@class,"app-container")]/form/div[contains(@class,"search-btns")]/button[1]'))).click()
+
         #点击第一菜单
         wait.until(EC.element_to_be_clickable(
             (By.XPATH, '//div[label[@for="one_id"]]//input'))).click()
         #选择行政管理
-        wait.until(EC.element_to_be_clickable(
-            (By.XPATH, '//div[contains(@class,"el-select-dropdown")]//span[text()="行政管理"]'))).click()
+        time.sleep(1)
+        element=wait.until(EC.element_to_be_clickable(
+            (By.XPATH, '//div[contains(@class,"el-select-dropdown")]//span[text()="行政管理"]')))
+        driver.execute_script("arguments[0].click();", element)
         #点击查询按钮
         wait.until(EC.element_to_be_clickable(
             (By.XPATH, '//div[contains(@class,"app-container")]/form/div[contains(@class,"search-btns")]/button[2]'))).click()

@@ -1,4 +1,6 @@
 import time
+
+import pandas as pd
 from selenium.webdriver.chrome.options import Options
 import allure
 import pytest
@@ -16,7 +18,9 @@ import numpy as np
 
 # 设置Tesseract路径（根据实际安装位置调整）
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-
+df=pd.read_csv(r"C:\Users\Administrator\Desktop\test\address.csv")
+url = df.loc[0, 'url']
+data=df.loc[0,'data']
 def highlight_element(driver, element):
     """高亮显示元素"""
     driver.execute_script("arguments[0].style.border='6px solid red';", element)
@@ -44,8 +48,8 @@ def to_rgb(color):
         return f"rgb({r}, {g}, {b})"
     else:
         return color  # 无法识别的格式原样返回
-data=[(2560,1600),(1920,1200),(2560,1440),(1920,1080),(1366,768)]
-@pytest.fixture(scope="module", params=[(1920,1080),(1366,768)])
+
+@pytest.fixture(scope="module", params=data)
 def resolution(request):
 
     """分辨率fixture"""
@@ -86,7 +90,7 @@ def driver(request,resolution):
 def login(driver):
     """登录系统"""
     # 访问登录页
-    driver.get("http://192.168.2.42:9529/#/login")
+    driver.get(url)
     wait = WebDriverWait(driver, 20)
 
     try:
@@ -162,15 +166,15 @@ def test_search_name(driver,navigate_to_scope_approval):
     wait=WebDriverWait(driver,20)
 
     try:
-        wait.until(EC.element_to_be_clickable((By.XPATH, '//div[label[@for="file_name"]]//input'))).send_keys("薪资")
+        wait.until(EC.element_to_be_clickable((By.XPATH, '//div[label[@for="file_name"]]//input'))).send_keys("修改人员资料")
         wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="search-btns el-row"]//button[span[text()="查询"]]'))).click()
         time.sleep(3)
         title=wait.until(EC.element_to_be_clickable((By.XPATH, '//tbody/tr[1]/td[2]//span/span')))
-        if "薪资" not in title.text :
+        if "修改人员资料" not in title.text :
             highlight_element(driver,title)
             allure.attach(driver.get_screenshot_as_png(), name="单据名称查询失败截图",attachment_type=allure.attachment_type.PNG)
             reset_element(driver, title)
-        assert "薪资" in title.text
+        assert "修改人员资料" in title.text
     except Exception as e:
         raise e
 

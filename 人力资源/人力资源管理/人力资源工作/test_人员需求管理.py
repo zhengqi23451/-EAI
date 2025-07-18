@@ -1,4 +1,6 @@
 import time
+
+import pandas as pd
 from selenium.webdriver.chrome.options import Options
 import allure
 import pytest
@@ -16,7 +18,9 @@ import numpy as np
 
 # 设置Tesseract路径（根据实际安装位置调整）
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-
+df=pd.read_csv(r"C:\Users\Administrator\Desktop\test\address.csv")
+url = df.loc[0, 'url']
+data=df.loc[0,'data']
 def highlight_element(driver, element):
     """高亮显示元素"""
     driver.execute_script("arguments[0].style.border='6px solid red';", element)
@@ -44,7 +48,7 @@ def to_rgb(color):
         return f"rgb({r}, {g}, {b})"
     else:
         return color  # 无法识别的格式原样返回
-@pytest.fixture(scope="module", params=[(1920,1080),(1366,768)])
+@pytest.fixture(scope="module", params=data)
 def resolution(request):
     """分辨率fixture"""
     return request.param
@@ -85,7 +89,7 @@ def driver(request,resolution):
 def login(driver):
     """登录系统"""
     # 访问登录页
-    driver.get("http://192.168.2.42:9529/#/login")
+    driver.get(url)
     wait = WebDriverWait(driver, 20)
     try:
         # 验证码处理
@@ -309,7 +313,7 @@ def test_search_by_department(driver, navigate):
         # 截图并附加到 Allure 报告
         raise e
 
-@pytest.mark.skip
+#@pytest.mark.skip
 @allure.epic("人力资源管理")
 @allure.feature("人力资源工作")
 @allure.story("人员需求管理")
@@ -322,7 +326,7 @@ def test_search_by_married(driver, navigate):
     try:
         #部门查询测试
         wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="demand_marriage"]]//input'))).click()
-        wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@x-placement="bottom-start"]//li/span[text()="已婚"]'))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@x-placement="bottom-start"]//li/span[text()="必须已婚"]'))).click()
 
         wait.until(EC.presence_of_element_located(
             (By.XPATH, '//form//button[contains(@class,"el-button--success")]'))).click()
@@ -333,11 +337,11 @@ def test_search_by_married(driver, navigate):
         text=wait.until(EC.presence_of_element_located(
             (By.XPATH, '//tbody/tr[1]/td[10]//span/span')))
         n = text.text
-        if "已婚" not in n :
+        if "必须已婚" not in n :
             highlight_element(driver,text)
             allure.attach(driver.get_screenshot_as_png(), name="查询失败截图",attachment_type=allure.attachment_type.PNG)
             reset_element(driver, text)
-        assert "已婚" in n
+        assert "必须已婚" in n
     except Exception as e:
         # 截图并附加到 Allure 报告
         raise e
@@ -655,7 +659,7 @@ def test_search_by_job(driver, navigate):
         # 截图并附加到 Allure 报告
         raise e
 
-@pytest.mark.skip
+
 @allure.epic("人力资源管理")
 @allure.feature("人力资源工作")
 @allure.story("人员需求管理")
@@ -668,7 +672,7 @@ def test_search_by_edu(driver, navigate):
     try:
         #查询测试
         wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="demand_education"]]//input'))).click()
-        wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@x-placement="bottom-start"]//li/span[text()="大专"]'))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@x-placement="bottom-start"]//li/span[text()="本科"]'))).click()
 
         wait.until(EC.presence_of_element_located(
             (By.XPATH, '//form//button[contains(@class,"el-button--success")]'))).click()
@@ -679,11 +683,11 @@ def test_search_by_edu(driver, navigate):
         text=wait.until(EC.presence_of_element_located(
             (By.XPATH, '//tbody/tr[1]/td[9]//span/span')))
         n = text.text
-        if "大专" not in n :
+        if "本科" not in n :
             highlight_element(driver,text)
             allure.attach(driver.get_screenshot_as_png(), name="查询失败截图",attachment_type=allure.attachment_type.PNG)
             reset_element(driver, text)
-        assert "大专" in n
+        assert "本科" in n
     except Exception as e:
         # 截图并附加到 Allure 报告
         raise e

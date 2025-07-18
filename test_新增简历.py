@@ -2,6 +2,7 @@ import os
 import time
 import random
 import allure
+import pandas as pd
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -21,7 +22,9 @@ import numpy as np
 
 # 设置Tesseract路径（根据实际安装位置调整）
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-
+df=pd.read_csv(r"C:\Users\Administrator\Desktop\test\address.csv")
+url = df.loc[0, 'url']
+data=df.loc[0,'data']
 def highlight_element(driver, element):
     """高亮显示元素"""
     driver.execute_script("arguments[0].style.border='6px solid red';", element)
@@ -51,7 +54,7 @@ def to_rgb(color):
         return color  # 无法识别的格式原样返回
 
 
-@pytest.fixture(scope="module", params=[(1920,1080)])
+@pytest.fixture(scope="module", params=data)
 def resolution(request):
     """分辨率fixture"""
     return request.param
@@ -92,7 +95,7 @@ def driver(request,resolution):
 def login(driver):
     """登录系统"""
     # 访问登录页
-    driver.get("http://192.168.2.42:9529/#/login")
+    driver.get(url)
     wait = WebDriverWait(driver, 20)
     try:
         # 验证码处理
@@ -266,9 +269,9 @@ def test_addjl_save(driver,navigate_to_addjl):
     wait = WebDriverWait(driver, 10)
     try:
         #姓名
-        wait.until(EC.presence_of_element_located((By.XPATH,"//div[contains(@class,'el-row')]//div[label[@for='name']]//input"))).send_keys("test1")
+        wait.until(EC.presence_of_element_located((By.XPATH,"//div[contains(@class,'el-row')]//div[label[@for='name']]//input"))).send_keys("技术总监招聘")
         #身份证
-        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='id_card']]//input"))).send_keys("431321200812138562")
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='id_card']]//input"))).send_keys("340222199209213153")
         #户口地址
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='hukou_address']]//input"))).send_keys("地球村")
         #民族
@@ -309,14 +312,14 @@ def test_addjl_save(driver,navigate_to_addjl):
         #毕业学校
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='school']]//input"))).send_keys("人文学院")
         #手机号
-        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='mobile']]//input"))).send_keys("17551532058")
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='mobile']]//input"))).send_keys("13330693892")
         #紧急联系人
         #称谓
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='urgent_cont[0].appellation']]//input"))).send_keys("父亲")
         #姓名
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='urgent_cont[0].urgent_name']]//input"))).send_keys("father")
         #手机号
-        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='urgent_cont[0].urgent_mobile']]//input"))).send_keys("18863968359")
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='urgent_cont[0].urgent_mobile']]//input"))).send_keys("13918506585")
 
         #选择图片
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='grid-col flex-x-center el-col el-col-24']//span"))).click()
@@ -326,15 +329,16 @@ def test_addjl_save(driver,navigate_to_addjl):
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='incident']]//input"))).click()
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@x-placement='top-start']//li[span[text()='普件']]"))).click()
         # 点击提交
+        time.sleep(1)
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='form-bottom-bar flex flex-x-center']/button[span[text()='提交']]"))).click()
 
         title = wait.until(EC.presence_of_element_located(
             (By.XPATH, "//div[contains(@class,'el-message')]/p[contains(text(),'保存成功')]")))
-        if title!="提交成功":
+        if title!="保存成功":
             highlight_element(driver,title)
             allure.attach(driver.get_screenshot_as_png(), name="保存失败高亮截图", attachment_type=allure.attachment_type.PNG)
             reset_element(driver, title)
-        assert title.text == "提交成功"
+        assert title.text == "保存成功"
 
     except Exception as e:
         # 截图并附加到 Allure 报告

@@ -1,4 +1,6 @@
 import time
+
+import pandas as pd
 from selenium.webdriver.chrome.options import Options
 import allure
 import pytest
@@ -13,7 +15,9 @@ import base64
 import io
 import cv2
 import numpy as np
-
+df=pd.read_csv(r"C:\Users\Administrator\Desktop\test\address.csv")
+url = df.loc[0, 'url']
+data=df.loc[0,'data']
 def highlight_element(driver, element):
     """高亮显示元素"""
     driver.execute_script("arguments[0].style.border='6px solid red';", element)
@@ -39,7 +43,7 @@ def driver():
 def login(driver,request):
     username = request.param.get("username")
     password = request.param.get("password")
-    driver.get("http://192.168.2.42:9529/#/login")
+    driver.get(url)
     wait = WebDriverWait(driver, 20)
     try:
         # 验证码处理
@@ -145,7 +149,7 @@ def approve_f(driver):
     #就职信息和岗位配置信息
     #点击选择按钮
     wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='flex']/button"))).click()
-    wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='el-dialog__body']//div[label[@for='role_name']]//input"))).send_keys("锯料/技工")
+    wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='el-dialog__body']//div[label[@for='role_name']]//input"))).send_keys("技术总监") #锯料/技工
     wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='el-dialog__body']//button[span[text()='查询']]"))).click()
     time.sleep(1)
     wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='el-dialog__body']//tbody/tr[1]/td[2]//span/span"))).click()
@@ -268,10 +272,12 @@ def add_jl(driver,title):
     #{"username": "JH-03502", "password": "307306"},
     #人事经理
     {"username": "JH-03173", "password": "123456"},
-    #组长
-    {"username": "JH-01048", "password": "123456","title":"车间/主任审批意见"},
-    #部门经理
-    {"username": "JH-00849", "password": "350715","title":"生产部经理审批意见"},
+    #精工组组长
+    #{"username": "JH-01048", "password": "123456","title":"车间/主任审批意见"},
+    #生产部部门经理
+    #{"username": "JH-00849", "password": "350715","title":"生产部经理审批意见"},
+    # 科技部部门经理
+    #{"username": "JH-03266", "password": "123456", "title": "技术总监审批意见"},
     #部门副总（暂无）
     #{"username": "JH-03173", "password": "123456"},
     #总经理
