@@ -652,7 +652,7 @@ def test_search_by_zodiac(driver, navigate):
         wait.until(EC.presence_of_element_located(
             (By.XPATH, '//form//button[contains(@class,"el-button--primary")]'))).click()
         text=wait.until(EC.presence_of_element_located(
-            (By.XPATH, '//tbody/tr[1]/td[9]//span/span')))
+            (By.XPATH, '//tbody/tr[1]/td[11]//span/span')))
         n = text.text
         if "马" not in n :
             highlight_element(driver,text)
@@ -686,7 +686,7 @@ def test_search_by_married(driver, navigate):
         wait.until(EC.presence_of_element_located(
             (By.XPATH, '//form//button[contains(@class,"el-button--primary")]'))).click()
         text=wait.until(EC.presence_of_element_located(
-            (By.XPATH, '//tbody/tr[1]/td[9]//span/span')))
+            (By.XPATH, '//tbody/tr[1]/td[12]//span/span')))
         n = text.text
         if "已婚" not in n :
             highlight_element(driver,text)
@@ -720,11 +720,11 @@ def test_search_by_area(driver, navigate):
         text=wait.until(EC.presence_of_element_located(
             (By.XPATH, '//tbody/tr[1]/td[16]//span/span')))
         n = text.text
-        if "河北省" not in n :
+        if "河南省" not in n :
             highlight_element(driver,text)
             allure.attach(driver.get_screenshot_as_png(), name="查询失败截图",attachment_type=allure.attachment_type.PNG)
             reset_element(driver, text)
-        assert "河北省" in n
+        assert "河南省" in n
     except Exception as e:
         # 截图并附加到 Allure 报告
         raise e
@@ -752,7 +752,7 @@ def test_search_by_political_status(driver, navigate):
         wait.until(EC.presence_of_element_located(
             (By.XPATH, '//form//button[contains(@class,"el-button--primary")]'))).click()
         text=wait.until(EC.presence_of_element_located(
-            (By.XPATH, '//tbody/tr[1]/td[9]//span/span')))
+            (By.XPATH, '//tbody/tr[1]/td[14]//span/span')))
         n = text.text
         if "群众" not in n :
             highlight_element(driver,text)

@@ -354,7 +354,7 @@ def test_send_password(driver,navigate_to_user_management):
         time.sleep(1)
         # 输入姓名查询
         wait.until(EC.element_to_be_clickable(
-            (By.XPATH, '//div[@aria-label="选择人员"]//div[@class="el-dialog__body"]//div[label[@for="name"]]//input'))).send_keys("郑琦")
+            (By.XPATH, '//div[@aria-label="选择人员"]//div[@class="el-dialog__body"]//div[label[@for="name"]]//input'))).send_keys("应俊")
         wait.until(EC.element_to_be_clickable(
             (By.XPATH, '//div[contains(@class,"search-btns-dialog")]//button[span[text()="查询"]]'))).click()
         # 选择确定

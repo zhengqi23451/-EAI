@@ -295,7 +295,7 @@ def test_search_by_name(driver, navigate):
     time.sleep(3)
     try:
         #部门查询测试
-        wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="name"]]//input'))).send_keys("test")
+        wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="name"]]//input'))).send_keys("徐依林")
 
 
         wait.until(EC.presence_of_element_located(
@@ -307,11 +307,11 @@ def test_search_by_name(driver, navigate):
         text=wait.until(EC.presence_of_element_located(
             (By.XPATH, '//tbody/tr[1]/td[6]//span/span')))
         n = text.text
-        if "test" not in n :
+        if "徐依林" not in n :
             highlight_element(driver,text)
             allure.attach(driver.get_screenshot_as_png(), name="文件名称查询失败截图",attachment_type=allure.attachment_type.PNG)
             reset_element(driver, text)
-        assert "test" in n
+        assert "徐依林" in n
     except Exception as e:
         # 截图并附加到 Allure 报告
         raise e

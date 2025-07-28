@@ -173,6 +173,7 @@ def test_search_name(driver,navigate_to_workflow):
     try:
         wait.until(EC.element_to_be_clickable((By.XPATH, '//div[label[@for="file_name"]]//input'))).send_keys("薪资")
         wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="search-btns el-row"]//button[span[text()="查询"]]'))).click()
+        time.sleep(0.5)
         title=wait.until(EC.element_to_be_clickable((By.XPATH, '//tbody/tr[1]/td[2]//span/span')))
         if "薪资" not in title.text :
             highlight_element(driver,title)

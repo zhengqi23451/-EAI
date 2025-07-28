@@ -314,7 +314,7 @@ def test_file_style(driver, navigate_to_skill_appraisal):
 
         #编辑按钮样式
         modify_button = wait.until(EC.element_to_be_clickable(
-            (By.XPATH, '//tbody/tr[2]/td[contains(@class,"col--last")]/div/div/button[contains(@class,"font-primary")]')))
+            (By.XPATH, '//tbody/tr[1]/td[contains(@class,"col--last")]/div/div/button[contains(@class,"font-primary")]')))
         driver.execute_script("arguments[0].scrollIntoView();", modify_button)
         actual_styles = {
             'background-color': to_rgb(modify_button.value_of_css_property('background-color')),
@@ -332,7 +332,7 @@ def test_file_style(driver, navigate_to_skill_appraisal):
 
         #删除按钮样式
         delete_button = wait.until(EC.element_to_be_clickable(
-            (By.XPATH, '//tbody/tr[2]/td[contains(@class,"col--last")]/div/div/button[contains(@class,"font-danger")]')))
+            (By.XPATH, '//tbody/tr[1]/td[contains(@class,"col--last")]/div/div/button[contains(@class,"font-danger")]')))
         driver.execute_script("arguments[0].scrollIntoView(true);", delete_button)
         time.sleep(5)
         actual_styles = {

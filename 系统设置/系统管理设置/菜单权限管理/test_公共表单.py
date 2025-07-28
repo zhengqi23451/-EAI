@@ -236,7 +236,7 @@ def test_search_second(driver,navigate_to_public_form):
         raise e
 
 
-@pytest.mark.skip(reason="功能未实现")
+#@pytest.mark.skip(reason="功能未实现")
 @pytest.mark.parametrize("driver",['chrome'],indirect=True)
 @allure.epic("系统管理设置")
 @allure.feature("菜单权限管理")

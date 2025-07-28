@@ -327,8 +327,8 @@ def test_file_search_by_department(driver, navigate):
     try:
         #部门查询测试
         wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="fk_dep_id"]]//input'))).click()
-        wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@x-placement="bottom-start"]//li/span[text()="科技部"]'))).click()
-
+        e=wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@x-placement="bottom-start"]//li/span[text()="科技部"]')))
+        driver.execute_script("arguments[0].click();", e)
         wait.until(EC.presence_of_element_located(
             (By.XPATH, '//form//button[contains(@class,"el-button--success")]'))).click()
         time.sleep(2)

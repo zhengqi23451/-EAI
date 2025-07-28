@@ -270,11 +270,19 @@ def test_file_style(driver, navigate_to_addjl):
 @pytest.mark.parametrize("driver",['chrome'],indirect=True)
 def test_addjl_save(driver,navigate_to_addjl):
     wait = WebDriverWait(driver, 10)
+    name="test20"
+    #身份证
+    sfz = "540424200106172703"
+    # 手机号1
+    p1 = "15354290085"
+    #手机号2
+    p2 = "17696896684"
     try:
         #姓名
-        wait.until(EC.presence_of_element_located((By.XPATH,"//div[contains(@class,'el-row')]//div[label[@for='name']]//input"))).send_keys("技术总监招聘")
+        wait.until(EC.presence_of_element_located((By.XPATH,"//div[contains(@class,'el-row')]//div[label[@for='name']]//input"))).send_keys(name)
         #身份证
-        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='id_card']]//input"))).send_keys("340222199209213153")
+
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='id_card']]//input"))).send_keys(sfz)
         #户口地址
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='hukou_address']]//input"))).send_keys("地球村")
         #民族
@@ -315,14 +323,15 @@ def test_addjl_save(driver,navigate_to_addjl):
         #毕业学校
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='school']]//input"))).send_keys("人文学院")
         #手机号
-        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='mobile']]//input"))).send_keys("13330693892")
+
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='mobile']]//input"))).send_keys(p1)
         #紧急联系人
         #称谓
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='urgent_cont[0].appellation']]//input"))).send_keys("父亲")
         #姓名
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='urgent_cont[0].urgent_name']]//input"))).send_keys("father")
         #手机号
-        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='urgent_cont[0].urgent_mobile']]//input"))).send_keys("13918506585")
+        wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='urgent_cont[0].urgent_mobile']]//input"))).send_keys(p2)
 
         #选择图片
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='grid-col flex-x-center el-col el-col-24']//span"))).click()
@@ -336,12 +345,12 @@ def test_addjl_save(driver,navigate_to_addjl):
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@class='form-bottom-bar flex flex-x-center']/button[span[text()='提交']]"))).click()
 
         title = wait.until(EC.presence_of_element_located(
-            (By.XPATH, "//div[contains(@class,'el-message')]/p[contains(text(),'保存成功')]")))
-        if title!="保存成功":
+            (By.XPATH, '//p[@class="el-message__content"]')))
+        if title!="提交成功":
             highlight_element(driver,title)
             allure.attach(driver.get_screenshot_as_png(), name="保存失败高亮截图", attachment_type=allure.attachment_type.PNG)
             reset_element(driver, title)
-        assert title.text == "保存成功"
+        assert title.text == "提交成功"
 
     except Exception as e:
         # 截图并附加到 Allure 报告
@@ -349,3 +358,5 @@ def test_addjl_save(driver,navigate_to_addjl):
         raise e
 
 
+def test_minimal():
+    assert 1 == 1

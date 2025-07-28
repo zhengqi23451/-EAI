@@ -265,7 +265,7 @@ def test_delete(driver,navigate_to_text_config):
 @pytest.mark.parametrize("driver",['chrome'],indirect=True)
 @allure.epic("系统管理设置")
 @allure.feature("网站配置管理")
-@allure.story("文件配置管理")
+@allure.story("文本配置管理")
 @allure.description("样式比较")
 def test_file_style(driver, navigate_to_text_config):
     """测试文件相关组件的样式"""

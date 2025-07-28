@@ -207,12 +207,12 @@ def test_add(driver,navigate_to_resource_management):
         add=wait.until(EC.element_to_be_clickable((By.XPATH, '//div[contains(@class,"adaptive")]//div[@class="right flex flex-y-center"]/button[span[text()="新增"]]')))
         add.click()
         #上级菜单
-        wait.until(EC.element_to_be_clickable((By.XPATH,"//div[@class='el-dialog__body']//form//div[label[@for='parentId']]/div[@class='el-form-item__content']//input"))).click()
+        #wait.until(EC.element_to_be_clickable((By.XPATH,"//div[@class='el-dialog__body']//form//div[label[@for='parentId']]/div[@class='el-form-item__content']//input"))).click()
         #选择test
-        t=wait.until(EC.element_to_be_clickable((By.XPATH,"//div[@class='el-cascader-panel']/div[1]//li[span[text()='test']]/label/span[1]")))
-        driver.execute_script("arguments[0].scrollIntoView();", t)
-        t.click()
-        wait.until(EC.element_to_be_clickable((By.XPATH,"//div[@class='el-dialog__body']//form//div[label[@for='parentId']]/div[@class='el-form-item__content']//input"))).click()
+        #t=wait.until(EC.element_to_be_clickable((By.XPATH,"//div[@class='el-cascader-panel']/div[1]//li[span[text()='test']]/label/span[1]")))
+        #driver.execute_script("arguments[0].scrollIntoView();", t)
+
+        #wait.until(EC.element_to_be_clickable((By.XPATH,"//div[@class='el-dialog__body']//form//div[label[@for='parentId']]/div[@class='el-form-item__content']//input"))).click()
 
         #菜单名称
         wait.until(EC.element_to_be_clickable((By.XPATH,"//div[@class='el-row']//div[label[@for='title']]//input"))).send_keys("test1")

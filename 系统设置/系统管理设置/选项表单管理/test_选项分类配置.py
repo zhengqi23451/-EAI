@@ -178,9 +178,12 @@ def test_add(driver,navigate_to_option_classification_config):
     time.sleep(3)
     try:
         #点击公共分类页面
-        wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="el-card__body"]//span[text()="公共分类页面"]'))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="el-card__body"]//span[text()="系统设置"]'))).click()
         #点击宿舍房型
-        wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="el-card__body"]//span[text()="宿舍房型"]'))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="el-card__body"]//span[text()="其他配置管理"]'))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="el-card__body"]//span[text()="短信信息管理"]'))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="el-card__body"]//span[text()="普通短信管理"]'))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="el-card__body"]//span[text()="短信发送原因"]'))).click()
         #点击新增按钮
         add=wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="left flex flex-y-center"]//button[span[text()="新增"]]')))
         driver.execute_script("arguments[0].click();", add)
@@ -214,7 +217,7 @@ def test_modify(driver,navigate_to_option_classification_config):
     try:
         #点击修改按钮
         wait.until(EC.element_to_be_clickable(
-            (By.XPATH, '//tbody/tr[4]/td[contains(@class,"col--last")]/div/div/button[contains(@class,"font-primary")]'))).click()
+            (By.XPATH, '//tbody/tr[last()]/td[contains(@class,"col--last")]/div/div/button[contains(@class,"font-primary")]'))).click()
         #点击保存按钮
         wait.until(EC.element_to_be_clickable(
             (By.XPATH, '//div[@aria-label="修改配置"]//div[@class="el-dialog__footer"]//button[span[text()="保存"]]'))).click()

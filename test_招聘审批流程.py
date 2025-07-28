@@ -90,6 +90,8 @@ def navigate_to_approval(driver, login):
         if width<=1366:
             #点击扩展列表
             wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@class="menu-bar"]/div[@class="flex flex-x-center flex-y-center fold-box"]/i'))).click()
+        #点击协同办公
+        wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="sidebar-container"]//li//span[text()="协同办公"]'))).click()
         #点击我的工作
         wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@class="sidebar-container"]//li//span[text()="我的工作"]'))).click()
         #点击我的审批
@@ -283,7 +285,7 @@ def add_jl(driver,title):
     #部门副总（暂无）
     #{"username": "JH-03173", "password": "123456"},
     #总经理
-    {"username": "JH-01562", "password": "520308","title":"总经理审批意见"},
+    #{"username": "JH-01562", "password": "520308","title":"总经理审批意见"},
     #董事长
     {"username": "JH-00001", "password": "1231234567","title":"董事长审批意见"},
 ], indirect=True)

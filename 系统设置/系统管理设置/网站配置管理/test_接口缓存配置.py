@@ -384,6 +384,12 @@ def test_modify(driver,navigate_to_interface_config):
     wait = WebDriverWait(driver, 20)
     time.sleep(3)
     try:
+        #查询框
+        p=wait.until(EC.element_to_be_clickable((By.XPATH, '//section//form/div[@class="el-row"]//div[label[@for="main_name"]]//input')))
+        p.send_keys("t1")
+        #点击查询按钮
+        wait.until(EC.element_to_be_clickable((By.XPATH, '//div[contains(@class,"app-container")]/form/div[contains(@class,"search-btns")]/button[2]'))).click()
+        time.sleep(2)
         #点击修改按钮
         wait.until(EC.element_to_be_clickable(
             (By.XPATH, '//tbody/tr[1]/td[contains(@class,"col--last")]/div/div/button[contains(@class,"font-primary")]'))).click()
@@ -412,6 +418,7 @@ def test_delete(driver,navigate_to_interface_config):
     wait = WebDriverWait(driver, 20)
     time.sleep(3)
     try:
+
         #点击删除按钮
         wait.until(EC.element_to_be_clickable(
             (By.XPATH, '//tbody/tr[1]/td[contains(@class,"col--last")]/div/div/button[contains(@class,"font-danger")]'))).click()
