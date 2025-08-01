@@ -1,19 +1,18 @@
 # selenium 相关
-selenium==4.22.0
-webdriver-manager==4.0.1        # 自动下载/管理 chromedriver（可选）
+selenium
+webdriver-manager        # 自动下载/管理 chromedriver（可选）
 
 # 数据处理
-pandas==2.2.2
+pandas
 
 # 图像识别
-pytesseract==0.3.10
-Pillow==10.4.0
-opencv-python==4.10.0.84
-numpy==1.26.4
-
+pytesseract
+Pillow
+opencv-python
+numpy
 # 测试框架
-pytest==8.2.2
-allure-pytest==2.13.5           # 与 allure 报告集成
+pytest
+allure-pytest           # 与 allure 报告集成
 
 # 其他
-ast-unparse==1.6.3              # 如果用到 ast 反解析（可选）
+ast-unparse              # 如果用到 ast 反解析（可选）
