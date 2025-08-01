@@ -149,16 +149,16 @@ def navigate(driver, login):
             (By.XPATH, '//div[@class="sidebar-container"]//li//span[text()="人力资源工作"]'))).click()
         # 点击部门结构管理
         wait.until(EC.element_to_be_clickable(
-            (By.XPATH, '//div[@class="sidebar-container"]//li/ul//span[text()="员工档案管理"]'))).click()
+            (By.XPATH, '//div[@class="sidebar-container"]//li/ul//span[text()="待转正中人员"]'))).click()
         # 验证页面加载
         time.sleep(2)
         title = wait.until(EC.presence_of_element_located(
             (By.XPATH,'//section//div[@class="table-info-bar flex flex-x-sb flex-y-center"]/div[@class="left flex flex-y-center"]/span[@class="title"]')))
-        if title.text!="员工档案管理":
+        if title.text!="待转正中人员":
             highlight_element(driver,title)
             allure.attach(driver.get_screenshot_as_png(), name="导航失败截图",attachment_type=allure.attachment_type.PNG)
             reset_element(driver,title)
-        assert title.text == "员工档案管理"
+        assert title.text == "待转正中人员"
     except Exception as e:
         # 截图并附加到 Allure 报告
         raise e
@@ -166,7 +166,7 @@ def navigate(driver, login):
 @pytest.mark.skip
 @allure.epic("人力资源管理")
 @allure.feature("人力资源工作")
-@allure.story("员工档案管理")
+@allure.story("待转正中人员")
 @allure.description("样式比较")
 @pytest.mark.parametrize("driver",['chrome'],indirect=True)
 def test_file_style(driver, navigate):
@@ -286,16 +286,17 @@ def test_file_style(driver, navigate):
 
 @allure.epic("人力资源管理")
 @allure.feature("人力资源工作")
-@allure.story("员工档案管理")
+@allure.story("待转正中人员")
 @allure.description("姓名查询")
 @pytest.mark.parametrize("driver",['chrome'],indirect=True)
 def test_search_by_name(driver, navigate):
     """测试按文件名查询"""
     wait = WebDriverWait(driver, 20)
     time.sleep(3)
+    name=方龙
     try:
         #部门查询测试
-        wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="name"]]//input'))).send_keys("谢烘云")
+        wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="name"]]//input'))).send_keys(name)
 
 
         wait.until(EC.presence_of_element_located(
@@ -307,27 +308,28 @@ def test_search_by_name(driver, navigate):
         text=wait.until(EC.presence_of_element_located(
             (By.XPATH, '//tbody/tr[1]/td[7]//span/span')))
         n = text.text
-        if "谢烘云" not in n :
+        if name not in n :
             highlight_element(driver,text)
-            allure.attach(driver.get_screenshot_as_png(), name="文件名称查询失败截图",attachment_type=allure.attachment_type.PNG)
+            allure.attach(driver.get_screenshot_as_png(), name="姓名查询失败截图",attachment_type=allure.attachment_type.PNG)
             reset_element(driver, text)
-        assert "谢烘云" in n
+        assert name in n
     except Exception as e:
         # 截图并附加到 Allure 报告
         raise e
 
 @allure.epic("人力资源管理")
 @allure.feature("人力资源工作")
-@allure.story("员工档案管理")
+@allure.story("待转正中人员")
 @allure.description("工号查询")
 @pytest.mark.parametrize("driver",['chrome'],indirect=True)
 def test_search_by_number(driver, navigate):
     """测试按文件名查询"""
     wait = WebDriverWait(driver, 20)
     time.sleep(3)
+    number="JH-03553"
     try:
         #部门查询测试
-        wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="fk_user_number"]]//input'))).send_keys("JH-00002")
+        wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="fk_user_number"]]//input'))).send_keys(number)
 
 
         wait.until(EC.presence_of_element_located(
@@ -339,11 +341,11 @@ def test_search_by_number(driver, navigate):
         text=wait.until(EC.presence_of_element_located(
             (By.XPATH, '//tbody/tr[1]/td[2]//span/span')))
         n = text.text
-        if "JH-00002" not in n :
+        if number not in n :
             highlight_element(driver,text)
-            allure.attach(driver.get_screenshot_as_png(), name="文件名称查询失败截图",attachment_type=allure.attachment_type.PNG)
+            allure.attach(driver.get_screenshot_as_png(), name="工号查询失败截图",attachment_type=allure.attachment_type.PNG)
             reset_element(driver, text)
-        assert "JH-00002" in n
+        assert number in n
     except Exception as e:
         # 截图并附加到 Allure 报告
         raise e
@@ -351,18 +353,19 @@ def test_search_by_number(driver, navigate):
 
 @allure.epic("人力资源管理")
 @allure.feature("人力资源工作")
-@allure.story("员工档案管理")
+@allure.story("待转正中人员")
 @allure.description("部门查询")
 @pytest.mark.parametrize("driver",['chrome'],indirect=True)
 def test_search_by_department(driver, navigate):
     """测试按文件名查询"""
     wait = WebDriverWait(driver, 20)
     time.sleep(3)
+    dep="科技部"
     try:
         #部门查询测试
         wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="fk_dep_id"]]//input'))).click()
         time.sleep(1)
-        e=wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@x-placement="bottom-start"]//li/span[text()="科技部"]')))
+        e=wait.until(EC.element_to_be_clickable((By.XPATH,f'//div[@x-placement="bottom-start"]//li/span[text()="{dep}"]')))
         driver.execute_script("arguments[0].click()",e)
         wait.until(EC.presence_of_element_located((By.XPATH, '//form//button[contains(@class,"el-button--success")]'))).click()
         time.sleep(2)
@@ -372,11 +375,11 @@ def test_search_by_department(driver, navigate):
         text=wait.until(EC.presence_of_element_located(
             (By.XPATH, '//tbody/tr[1]/td[3]//span/span')))
         n = text.text
-        if "科技部" not in n :
+        if dep not in n :
             highlight_element(driver,text)
             allure.attach(driver.get_screenshot_as_png(), name="查询失败截图",attachment_type=allure.attachment_type.PNG)
             reset_element(driver, text)
-        assert "科技部" in n
+        assert dep in n
     except Exception as e:
         # 截图并附加到 Allure 报告
         raise e
@@ -384,18 +387,19 @@ def test_search_by_department(driver, navigate):
 
 @allure.epic("人力资源管理")
 @allure.feature("人力资源工作")
-@allure.story("员工档案管理")
+@allure.story("待转正中人员")
 @allure.description("岗位查询")
 @pytest.mark.parametrize("driver",['chrome'],indirect=True)
 def test_search_by_job(driver, navigate):
     """测试按文件名查询"""
     wait = WebDriverWait(driver, 20)
     time.sleep(3)
+    job="中层管理"
     try:
         #部门查询测试
         wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="fk_job_id"]]//input'))).click()
         time.sleep(1)
-        wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@x-placement="bottom-start"]//li/span[text()="中层管理"]'))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH,f'//div[@x-placement="bottom-start"]//li/span[text()="{job}"]'))).click()
 
         wait.until(EC.presence_of_element_located(
             (By.XPATH, '//form//button[contains(@class,"el-button--success")]'))).click()
@@ -406,11 +410,11 @@ def test_search_by_job(driver, navigate):
         text=wait.until(EC.presence_of_element_located(
             (By.XPATH, '//tbody/tr[1]/td[4]//span/span')))
         n = text.text
-        if "中层管理" not in n :
+        if job not in n :
             highlight_element(driver,text)
             allure.attach(driver.get_screenshot_as_png(), name="查询失败截图",attachment_type=allure.attachment_type.PNG)
             reset_element(driver, text)
-        assert "中层管理" in n
+        assert job in n
     except Exception as e:
         # 截图并附加到 Allure 报告
         raise e
@@ -418,18 +422,20 @@ def test_search_by_job(driver, navigate):
 
 @allure.epic("人力资源管理")
 @allure.feature("人力资源工作")
-@allure.story("员工档案管理")
+@allure.story("待转正中人员")
 @allure.description("职务查询")
 @pytest.mark.parametrize("driver",['chrome'],indirect=True)
 def test_search_by_role(driver, navigate):
     """测试按文件名查询"""
     wait = WebDriverWait(driver, 20)
     time.sleep(3)
+    role1="精工组"
+    role2="普钻/技工"
     try:
         #部门查询测试
         wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="fk_role_id"]]//input'))).click()
-        wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@x-placement="bottom-start"]//li/span[text()="科技部"]'))).click()
-        wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@x-placement="bottom-start"]//li/span[text()="全栈工程师"]'))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH,f'//div[@x-placement="bottom-start"]//li/span[text()="{role1}"]'))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH,f'//div[@x-placement="bottom-start"]//li/span[text()="{role2}"]'))).click()
 
         wait.until(EC.presence_of_element_located(
             (By.XPATH, '//form//button[contains(@class,"el-button--success")]'))).click()
@@ -440,11 +446,11 @@ def test_search_by_role(driver, navigate):
         text=wait.until(EC.presence_of_element_located(
             (By.XPATH, '//tbody/tr[1]/td[5]//span/span')))
         n = text.text
-        if "全栈工程师" not in n :
+        if role2 not in n :
             highlight_element(driver,text)
             allure.attach(driver.get_screenshot_as_png(), name="查询失败截图",attachment_type=allure.attachment_type.PNG)
             reset_element(driver, text)
-        assert "全栈工程师" in n
+        assert role2 in n
     except Exception as e:
         # 截图并附加到 Allure 报告
         raise e
@@ -452,7 +458,7 @@ def test_search_by_role(driver, navigate):
 
 @allure.epic("人力资源管理")
 @allure.feature("人力资源工作")
-@allure.story("员工档案管理")
+@allure.story("待转正中人员")
 @allure.description("性别查询")
 @pytest.mark.parametrize("driver",['chrome'],indirect=True)
 def test_search_by_sex(driver, navigate):
@@ -461,10 +467,11 @@ def test_search_by_sex(driver, navigate):
     width, height = window_size["width"], window_size["height"]
     wait = WebDriverWait(driver, 20)
     time.sleep(3)
+    sex="女"
     try:
         #部门查询测试
         wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="sex"]]//input'))).click()
-        wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@x-placement="bottom-start"]//li/span[text()="女"]'))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH,f'//div[@x-placement="bottom-start"]//li/span[text()="{sex}"]'))).click()
 
         wait.until(EC.presence_of_element_located(
             (By.XPATH, '//form//button[contains(@class,"el-button--success")]'))).click()
@@ -486,11 +493,11 @@ def test_search_by_sex(driver, navigate):
         text=wait.until(EC.presence_of_element_located((By.XPATH, '//tbody/tr[1]/td[8]//span/span')))
         n = text.text
         #driver.execute_script("arguments[0].scrollLeft -= 1000;", scroll_x_handle)
-        if "女" not in n :
+        if sex not in n :
             highlight_element(driver,text)
             allure.attach(driver.get_screenshot_as_png(), name="查询失败截图",attachment_type=allure.attachment_type.PNG)
             reset_element(driver, text)
-        assert "女" in n
+        assert sex in n
     except Exception as e:
         # 截图并附加到 Allure 报告
         raise e
@@ -498,7 +505,7 @@ def test_search_by_sex(driver, navigate):
 #@pytest.mark.skip
 @allure.epic("人力资源管理")
 @allure.feature("人力资源工作")
-@allure.story("员工档案管理")
+@allure.story("待转正中人员")
 @allure.description("年龄查询")
 @pytest.mark.parametrize("driver",['chrome'],indirect=True)
 def test_search_by_age(driver, navigate):
@@ -507,7 +514,7 @@ def test_search_by_age(driver, navigate):
     time.sleep(3)
     try:
         #部门查询测试
-        age="52"
+        age="42"
         wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="age"]]//span/span'))).click()
         wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@x-placement="bottom-start"]//li/span[text()="="]'))).click()
         wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="age"]]//input[@type="number"]'))).send_keys(age)
@@ -534,17 +541,18 @@ def test_search_by_age(driver, navigate):
 
 @allure.epic("人力资源管理")
 @allure.feature("人力资源工作")
-@allure.story("员工档案管理")
+@allure.story("待转正中人员")
 @allure.description("学历查询")
 @pytest.mark.parametrize("driver",['chrome'],indirect=True)
 def test_search_by_edu(driver, navigate):
     """测试按文件名查询"""
     wait = WebDriverWait(driver, 20)
     time.sleep(3)
+    edu="大专"
     try:
         #部门查询测试
         wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="education"]]//input'))).click()
-        wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@x-placement="bottom-start"]//li/span[text()="大专"]'))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH,f'//div[@x-placement="bottom-start"]//li/span[text()="{edu}"]'))).click()
 
         wait.until(EC.presence_of_element_located(
             (By.XPATH, '//form//button[contains(@class,"el-button--success")]'))).click()
@@ -555,11 +563,11 @@ def test_search_by_edu(driver, navigate):
         text=wait.until(EC.presence_of_element_located(
             (By.XPATH, '//tbody/tr[1]/td[13]//span/span')))
         n = text.text
-        if "大专" not in n :
+        if edu not in n :
             highlight_element(driver,text)
             allure.attach(driver.get_screenshot_as_png(), name="查询失败截图",attachment_type=allure.attachment_type.PNG)
             reset_element(driver, text)
-        assert "大专" in n
+        assert edu in n
     except Exception as e:
         # 截图并附加到 Allure 报告
         raise e
@@ -567,17 +575,18 @@ def test_search_by_edu(driver, navigate):
 
 @allure.epic("人力资源管理")
 @allure.feature("人力资源工作")
-@allure.story("员工档案管理")
+@allure.story("待转正中人员")
 @allure.description("历法查询")
 @pytest.mark.parametrize("driver",['chrome'],indirect=True)
 def test_search_by_lunar_calendar(driver, navigate):
     """测试按文件名查询"""
     wait = WebDriverWait(driver, 20)
     time.sleep(3)
+    calendar="阴历"
     try:
         #部门查询测试
         wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="lunar_calendar"]]//input'))).click()
-        wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@x-placement="bottom-start"]//li/span[text()="阴历"]'))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH,f'//div[@x-placement="bottom-start"]//li/span[text()="{calendar}"]'))).click()
 
         wait.until(EC.presence_of_element_located(
             (By.XPATH, '//form//button[contains(@class,"el-button--success")]'))).click()
@@ -588,11 +597,11 @@ def test_search_by_lunar_calendar(driver, navigate):
         text=wait.until(EC.presence_of_element_located(
             (By.XPATH, '//tbody/tr[1]/td[16]//span/span')))
         n = text.text
-        if "阴历" not in n :
+        if calendar not in n :
             highlight_element(driver,text)
             allure.attach(driver.get_screenshot_as_png(), name="查询失败截图",attachment_type=allure.attachment_type.PNG)
             reset_element(driver, text)
-        assert "阴历" in n
+        assert calendar in n
     except Exception as e:
         # 截图并附加到 Allure 报告
         raise e
@@ -600,18 +609,19 @@ def test_search_by_lunar_calendar(driver, navigate):
 
 @allure.epic("人力资源管理")
 @allure.feature("人力资源工作")
-@allure.story("员工档案管理")
+@allure.story("待转正中人员")
 @allure.description("民族查询")
 @pytest.mark.parametrize("driver",['chrome'],indirect=True)
 def test_search_by_nation(driver, navigate):
     """测试按文件名查询"""
     wait = WebDriverWait(driver, 20)
     time.sleep(3)
+    nation="汉族"
     try:
         #部门查询测试
         wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="nation"]]//input'))).click()
         time.sleep(1)
-        wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@x-placement="bottom-start"]//li/span[text()="汉族"]'))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH,f'//div[@x-placement="bottom-start"]//li/span[text()="{nation}"]'))).click()
 
         wait.until(EC.presence_of_element_located(
             (By.XPATH, '//form//button[contains(@class,"el-button--success")]'))).click()
@@ -622,11 +632,11 @@ def test_search_by_nation(driver, navigate):
         text=wait.until(EC.presence_of_element_located(
             (By.XPATH, '//tbody/tr[1]/td[9]//span/span')))
         n = text.text
-        if "汉族" not in n :
+        if nation not in n :
             highlight_element(driver,text)
             allure.attach(driver.get_screenshot_as_png(), name="查询失败截图",attachment_type=allure.attachment_type.PNG)
             reset_element(driver, text)
-        assert "汉族" in n
+        assert nation in n
     except Exception as e:
         # 截图并附加到 Allure 报告
         raise e
@@ -634,18 +644,19 @@ def test_search_by_nation(driver, navigate):
 
 @allure.epic("人力资源管理")
 @allure.feature("人力资源工作")
-@allure.story("员工档案管理")
+@allure.story("待转正中人员")
 @allure.description("生肖查询")
 @pytest.mark.parametrize("driver",['chrome'],indirect=True)
 def test_search_by_zodiac(driver, navigate):
     """测试按文件名查询"""
     wait = WebDriverWait(driver, 20)
     time.sleep(3)
+    zodiac="马"
     try:
         #部门查询测试
         wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="zodiac"]]//input'))).click()
         time.sleep(1)
-        wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@x-placement="bottom-start"]//li/span[text()="马"]'))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH,f'//div[@x-placement="bottom-start"]//li/span[text()="{zodiac}"]'))).click()
 
         wait.until(EC.presence_of_element_located(
             (By.XPATH, '//form//button[contains(@class,"el-button--success")]'))).click()
@@ -656,11 +667,11 @@ def test_search_by_zodiac(driver, navigate):
         text=wait.until(EC.presence_of_element_located(
             (By.XPATH, '//tbody/tr[1]/td[11]//span/span')))
         n = text.text
-        if "马" not in n :
+        if zodiac not in n :
             highlight_element(driver,text)
             allure.attach(driver.get_screenshot_as_png(), name="查询失败截图",attachment_type=allure.attachment_type.PNG)
             reset_element(driver, text)
-        assert "马" in n
+        assert zodiac in n
     except Exception as e:
         # 截图并附加到 Allure 报告
         raise e
@@ -668,18 +679,19 @@ def test_search_by_zodiac(driver, navigate):
 
 @allure.epic("人力资源管理")
 @allure.feature("人力资源工作")
-@allure.story("员工档案管理")
+@allure.story("待转正中人员")
 @allure.description("婚姻查询")
 @pytest.mark.parametrize("driver",['chrome'],indirect=True)
 def test_search_by_married(driver, navigate):
     """测试按文件名查询"""
     wait = WebDriverWait(driver, 20)
     time.sleep(3)
+    marriage="已婚"
     try:
         #部门查询测试
         wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="marriage"]]//input'))).click()
         time.sleep(1)
-        wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@x-placement="bottom-start"]//li/span[text()="已婚"]'))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH,f'//div[@x-placement="bottom-start"]//li/span[text()="{marriage}"]'))).click()
 
         wait.until(EC.presence_of_element_located(
             (By.XPATH, '//form//button[contains(@class,"el-button--success")]'))).click()
@@ -690,11 +702,11 @@ def test_search_by_married(driver, navigate):
         text=wait.until(EC.presence_of_element_located(
             (By.XPATH, '//tbody/tr[1]/td[12]//span/span')))
         n = text.text
-        if "已婚" not in n :
+        if marriage not in n :
             highlight_element(driver,text)
             allure.attach(driver.get_screenshot_as_png(), name="查询失败截图",attachment_type=allure.attachment_type.PNG)
             reset_element(driver, text)
-        assert "已婚" in n
+        assert marriage in n
     except Exception as e:
         # 截图并附加到 Allure 报告
         raise e
@@ -702,16 +714,17 @@ def test_search_by_married(driver, navigate):
 
 @allure.epic("人力资源管理")
 @allure.feature("人力资源工作")
-@allure.story("员工档案管理")
-@allure.description("地区查询")
+@allure.story("待转正中人员")
+@allure.description("省市区查询")
 @pytest.mark.parametrize("driver",['chrome'],indirect=True)
 def test_search_by_area(driver, navigate):
     """测试按文件名查询"""
     wait = WebDriverWait(driver, 20)
     time.sleep(3)
+    area="河南省"
     try:
         #部门查询测试
-        wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="province_city_district"]]//input'))).send_keys("河南省")
+        wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="province_city_district"]]//input'))).send_keys(area)
 
         wait.until(EC.presence_of_element_located(
             (By.XPATH, '//form//button[contains(@class,"el-button--success")]'))).click()
@@ -722,11 +735,11 @@ def test_search_by_area(driver, navigate):
         text=wait.until(EC.presence_of_element_located(
             (By.XPATH, '//tbody/tr[1]/td[17]//span/span')))
         n = text.text
-        if "河南省" not in n :
+        if area not in n :
             highlight_element(driver,text)
             allure.attach(driver.get_screenshot_as_png(), name="查询失败截图",attachment_type=allure.attachment_type.PNG)
             reset_element(driver, text)
-        assert "河南省" in n
+        assert area in n
     except Exception as e:
         # 截图并附加到 Allure 报告
         raise e
@@ -734,7 +747,7 @@ def test_search_by_area(driver, navigate):
 
 @allure.epic("人力资源管理")
 @allure.feature("人力资源工作")
-@allure.story("员工档案管理")
+@allure.story("待转正中人员")
 @allure.description("政治面貌查询")
 @pytest.mark.parametrize("driver",['chrome'],indirect=True)
 def test_search_by_political_status(driver, navigate):

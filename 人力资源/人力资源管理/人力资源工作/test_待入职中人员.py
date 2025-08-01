@@ -330,8 +330,8 @@ def test_search_by_department(driver, navigate):
         #部门查询测试
         wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="fk_dep_id"]]//input'))).click()
         time.sleep(1)
-        wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@x-placement="bottom-start"]//li/span[text()="科技部"]'))).click()
-
+        e=wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@x-placement="bottom-start"]//li/span[text()="科技部"]')))
+        driver.execute_script("arguments[0].click()",e)
         wait.until(EC.presence_of_element_located(
             (By.XPATH, '//form//button[contains(@class,"el-button--success")]'))).click()
         time.sleep(2)
@@ -464,7 +464,7 @@ def test_search_by_sex(driver, navigate):
         # 截图并附加到 Allure 报告
         raise e
 
-@pytest.mark.skip
+@pytest.mark.skip(reason="记录无年龄数据")
 @allure.epic("人力资源管理")
 @allure.feature("人力资源工作")
 @allure.story("待入职中人员")
@@ -476,8 +476,10 @@ def test_search_by_age(driver, navigate):
     time.sleep(3)
     try:
         #部门查询测试
-        wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="age"]]//input'))).click()
-        wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@x-placement="bottom-start"]//li/span[text()="中层管理"]'))).click()
+        age="20"
+        wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="age"]]//span/span'))).click()
+        wait.until(EC.element_to_be_clickable((By.XPATH,'//div[@x-placement="bottom-start"]//li/span[text()=">"]'))).click()
+        wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app"]//div[label[@for="age"]]//input[@type="number"]'))).send_keys(age)
 
         wait.until(EC.presence_of_element_located(
             (By.XPATH, '//form//button[contains(@class,"el-button--success")]'))).click()
@@ -486,13 +488,13 @@ def test_search_by_age(driver, navigate):
         wait.until(EC.presence_of_element_located(
             (By.XPATH, '//form//button[contains(@class,"el-button--primary")]'))).click()
         text=wait.until(EC.presence_of_element_located(
-            (By.XPATH, '//tbody/tr[1]/td[3]//span/span')))
+            (By.XPATH, '//tbody/tr[1]/td[8]//span/span')))
         n = text.text
-        if "中层管理" not in n :
+        if age != n :
             highlight_element(driver,text)
             allure.attach(driver.get_screenshot_as_png(), name="查询失败截图",attachment_type=allure.attachment_type.PNG)
             reset_element(driver, text)
-        assert "中层管理" in n
+        assert age == n
     except Exception as e:
         # 截图并附加到 Allure 报告
         raise e
@@ -530,7 +532,7 @@ def test_search_by_edu(driver, navigate):
         # 截图并附加到 Allure 报告
         raise e
 
-@pytest.mark.skip
+
 @allure.epic("人力资源管理")
 @allure.feature("人力资源工作")
 @allure.story("待入职中人员")
@@ -602,7 +604,7 @@ def test_search_by_Insurance(driver, navigate):
 @allure.epic("人力资源管理")
 @allure.feature("人力资源工作")
 @allure.story("待入职中人员")
-@allure.description("地区查询")
+@allure.description("省市区查询")
 @pytest.mark.parametrize("driver",['chrome'],indirect=True)
 def test_search_by_area(driver, navigate):
     """测试按文件名查询"""

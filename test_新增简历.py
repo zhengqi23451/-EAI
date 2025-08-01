@@ -270,13 +270,13 @@ def test_file_style(driver, navigate_to_addjl):
 @pytest.mark.parametrize("driver",['chrome'],indirect=True)
 def test_addjl_save(driver,navigate_to_addjl):
     wait = WebDriverWait(driver, 10)
-    name="test20"
+    name="test超龄保险"
     #身份证
-    sfz = "540424200106172703"
+    sfz = "11010119550101001X"
     # 手机号1
-    p1 = "15354290085"
+    p1 = "14553987513"
     #手机号2
-    p2 = "17696896684"
+    p2 = "18601697916"
     try:
         #姓名
         wait.until(EC.presence_of_element_located((By.XPATH,"//div[contains(@class,'el-row')]//div[label[@for='name']]//input"))).send_keys(name)
@@ -306,6 +306,7 @@ def test_addjl_save(driver,navigate_to_addjl):
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@x-placement='bottom-start']//span[text()='A型']"))).click()
         #公益献血
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='public_welfare']]//input"))).click()
+        time.sleep(0.5)
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@x-placement='bottom-start']//span[text()='暂无考虑']"))).click()
         #目标月薪
         wait.until(EC.element_to_be_clickable((By.XPATH, "//div[label[@for='salary']]//input"))).send_keys(3000)
