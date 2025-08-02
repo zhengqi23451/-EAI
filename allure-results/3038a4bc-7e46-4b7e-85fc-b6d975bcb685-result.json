@@ -1,1 +1,0 @@
-{"name": "test_file_style[resolution1-chrome]", "status": "skipped", "description": "样式比较", "parameters": [{"name": "resolution", "value": "(1366, 768)"}, {"name": "driver", "value": "'chrome'"}], "start": 1751090786147, "stop": 1751090786147, "uuid": "665321a0-a1e4-48d0-b36b-9eb927234259", "testCaseId": "009237414e4b01f661dfb4376e6d5668", "fullName": "test_我的审批#test_file_style"}

@@ -1,1 +1,0 @@
-{"name": "test_approve_candidates[login1]", "status": "skipped", "parameters": [{"name": "login", "value": "{'username': 'admin2', 'password': 'password2'}"}], "start": 1751674152793, "stop": 1751674152793, "uuid": "1b92781e-b7dc-4c7f-abf8-ec5d48fdb9de", "testCaseId": "fa7738f97c20fcff0c1f833201952ff0", "fullName": "test_审批流程#test_approve_candidates"}

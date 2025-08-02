@@ -1,1 +1,0 @@
-{"name": "test_approve_candidates[login1]", "status": "skipped", "parameters": [{"name": "login", "value": "{'username': 'JH-01048', 'password': '123456', 'title': '车间/主任审批意见'}"}], "start": 1751939972455, "stop": 1751939972455, "uuid": "2d1c4c80-78c6-4cea-b104-fd067b6966b9", "testCaseId": "d0c416a3a838d84fbf3ac19912da48f5", "fullName": "test_招聘审批流程#test_approve_candidates"}

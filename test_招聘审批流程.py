@@ -1,43 +1,4 @@
-import ast
-import time
-import pandas as pd
-from selenium.webdriver.chrome.options import Options
-import allure
-import pytest
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-import pytesseract
-from PIL import Image
-import base64
-import io
-import cv2
-import numpy as np
-df=pd.read_csv(r"C:\Users\Administrator\Desktop\test\address.csv")
-row=df.loc[0, ['url', 'data']]
-url = row['url']
-data_str = row['data']
-data = ast.literal_eval(data_str)
-def highlight_element(driver, element):
-    """高亮显示元素"""
-    driver.execute_script("arguments[0].style.border='6px solid red';", element)
-def reset_element(driver, element):
-    """恢复元素样式"""
-
-
-# 设置Tesseract路径（根据实际安装位置调整）
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-@pytest.fixture(scope="function")
-def driver():
-    options = Options()
-    options.binary_location =r"C:\Program Files\Google\Chrome\Application\chrome.exe"
-    service = Service(executable_path=r"C:\Program Files\Google\Chrome\Application\chromedriver.exe")
-    driver = webdriver.Chrome(service=service,options=options)
-    driver.maximize_window()
-    yield driver
-    driver.quit()
+from conftest import *
 
 
 # 登录固件
